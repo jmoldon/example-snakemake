@@ -1,0 +1,51 @@
+configfile: "config/config.yml"
+
+
+rule all:
+    input:
+        "results/publication/paper.pdf",
+
+
+rule download_data:
+    output:
+        "results/data/HCG16_CD_rob2_MS.pbcor.fits",
+    shell:
+        """
+       wget -P results/data {config[datacube_path]}
+       """
+
+
+rule create_moment0:
+    input:
+        "results/data/HCG16_CD_rob2_MS.pbcor.fits",
+    output:
+        "results/data/moment0.fits",
+    conda:
+        "envs/moment0.yml"
+    shell:
+        "python workflow/scripts/create_moment0.py {input[0]}"
+
+
+rule plot_moment0:
+    input:
+        "results/data/moment0.fits",
+    output:
+        "results/publication/figures/moment0.png",
+    conda:
+        "envs/plotfits.yml"
+    shell:
+        "python workflow/scripts/plot_moment0.py {input[0]}"
+
+
+rule tex2pdf_with_bib:
+    input:
+        "workflow/src/{name}.tex",
+        "results/publication/figures/moment0.png",
+    output:
+        "results/publication/{name}.pdf",
+    conda:
+        "envs/latex.yml"
+    shell:
+        """
+        tectonic -o results/publication workflow/src/{wildcards.name}.tex
+        """

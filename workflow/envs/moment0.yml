@@ -1,0 +1,12 @@
+name: moment0
+channels:
+  - astropy
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.9
+  - numpy=1.20
+  - astropy=5.1
+  - scipy=1.10
+  - six=1.16
+  - spectral-cube=0.5
