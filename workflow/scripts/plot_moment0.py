@@ -4,9 +4,7 @@ from astropy.io import fits
 import matplotlib.pyplot as plt
 from astropy.wcs import WCS
 
-# import aplpy
-
-moment0_file = sys.argv[-1]
+moment0_file = snakemake.input[0]
 outputfile = 'results/publication/figures/moment0.png'
 
 hdu = fits.open(moment0_file)[0]
